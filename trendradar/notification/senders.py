@@ -29,6 +29,8 @@ from urllib.parse import urlparse
 
 import requests
 
+from trendradar.text_converter import to_traditional_chinese
+
 from .batch import add_batch_headers, get_max_batch_header_size
 from .formatters import convert_markdown_to_mrkdwn, strip_markdown
 
@@ -623,6 +625,7 @@ def send_to_email(
         print(f"使用HTML文件: {html_file_path}")
         with open(html_file_path, "r", encoding="utf-8") as f:
             html_content = f.read()
+        html_content = to_traditional_chinese(html_content)
 
         domain = from_email.split("@")[-1].lower()
 
@@ -666,6 +669,7 @@ def send_to_email(
         # 设置邮件主题
         now = get_time_func() if get_time_func else datetime.now()
         subject = f"TrendRadar 热点分析报告 - {report_type} - {now.strftime('%m月%d日 %H:%M')}"
+        subject = to_traditional_chinese(subject)
         msg["Subject"] = Header(subject, "utf-8")
 
         # 设置其他标准 header
@@ -682,6 +686,7 @@ TrendRadar 热点分析报告
 
 请使用支持HTML的邮件客户端查看完整报告内容。
         """
+        text_content = to_traditional_chinese(text_content)
         text_part = MIMEText(text_content, "plain", "utf-8")
         msg.attach(text_part)
 

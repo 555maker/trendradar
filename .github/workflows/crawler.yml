@@ -125,6 +125,10 @@ jobs:
         if: success()
         run: uv sync --frozen --no-dev
 
+      - name: Install Traditional Chinese converter
+        if: success()
+        run: uv pip install opencc-python-reimplemented==0.1.7
+
       - name: Verify required files
         if: success()
         run: |
